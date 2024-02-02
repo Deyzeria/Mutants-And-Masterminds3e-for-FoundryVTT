@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "build:css": "lessc less/dnd5e.less dnd5e.css",
+    "lint": "eslint --ext .mjs ./",
+    "lint:fix": "eslint --ext .mjs ./ --fix",
+    "watch": "less-watch-compiler less/ ./ dnd5e.less"
+  },
+  "dependencies": {
+    "@babel/eslint-parser": "^7.22.15",
+    "@foundryvtt/foundryvtt-cli": "^1.0.0-rc.4",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "eslint-plugin-jsdoc": "^46.5.0",
+    "less": "^4.2.0",
+    "less-watch-compiler": "^1.16.3"
+  }
+}

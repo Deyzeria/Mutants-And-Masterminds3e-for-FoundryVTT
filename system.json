@@ -1,0 +1,23 @@
+{
+  "id": "mnm3efvtt",
+  "title": "Mutants and Masterminds 3e by Sinantrarion",
+  "description": "A system for playing Mutants and Masterminds 3rd Edition by Green Ronin, parsed by Sinantrarion",
+  "version": "0.0.1",
+  "compatibility": {
+    "minimum": 11,
+    "maximum": 11
+  },
+  "authors": [{
+    "name": "Sinantrarion",
+    "discord": "sinantrarion"
+  }],
+  "esmodules": ["mnm3efvtt.mjs"],
+  "styles": ["mnm3efvtt.css"],
+  "socket": true,
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "hbs", "json"],
+      "paths": ["mnm3efvtt.css", "templates", "lang"]
+    }
+  }
+}

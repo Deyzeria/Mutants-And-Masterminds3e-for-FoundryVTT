@@ -82,8 +82,7 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     // Movements
     schema.movements = new fields.SchemaField(Object.values(SYSTEM.DEFENSES).reduce(obj, movement => {
       obj[movement.id] = new fields.SchemaField({
-        rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: -5 }),
-        active: new fields.BooleanField()
+        rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: -5 })
       }, { label: movement.label });
       return obj;
     }, {}));
@@ -92,7 +91,7 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
       level = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       extrapoints = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
     );
-    
+
     return schema;
   }
 
@@ -129,7 +128,7 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    * @protected
    */
   _prepareAbilities() {
-    for ( const ability of Object.entries(this.abilities) ) {
+    for (const ability of Object.entries(this.abilities)) {
       this._prepareAbility(...ability);
     }
   }
@@ -141,10 +140,8 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    */
   _prepareAbility(abilityId, ability) {
     const rank = ability.rank ||= 0;
-    const misc = ability.misc ||= 0;
+    ability.misc ||= 0;
 
-    const auto = ability.auto ||= 0;
-    const total = ability.total = rank + misc + auto;
     // TODO: Maximum -10
     ability.spent = Math.min(rank * 2, -10);
   }
@@ -156,7 +153,7 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    * @protected
    */
   _prepareDefenses() {
-    for ( const defense of Object.entries(this.defenses) ) {
+    for (const defense of Object.entries(this.defenses)) {
       this._prepareDefense(...defense);
     }
   }
@@ -167,14 +164,8 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    * @param {MNMActorDefense} defense   Source data of the defense being configured
    */
   _prepareDefense(defenseId, defense) {
-    const config = SYSTEM.DEFENSES[defenseId];
     const rank = defense.rank ||= 0;
-    const misc = defense.misc ||= 0;
-    // TODO: I only need to get  system.abilities[config.ability].total
-    const abonus = defense.ability = this.abilities[config.ability].total;
-    const auto = defense.auto ||= 0;
-    const total = defense.total = rank + misc + abonus + auto;
-    defense.armor = SYSTEM.PASSIVE_BASE + total;
+    defense.misc ||= 0;
 
     defense.spent = rank;
     defense.immune ||= false;
@@ -188,7 +179,7 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    * @protected
    */
   _prepareSkills() {
-    for ( const skill of Object.entries(this.skills) ) {
+    for (const skill of Object.entries(this.skills)) {
       this._prepareSkill(...skill);
     }
   }
@@ -203,10 +194,6 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     const config = SYSTEM.SKILLS[skillId];
     const rank = skill.rank ||= 0;
     const misc = skill.misc ||= 0;
-    // TODO: I only need to get  system.abilities[config.ability].total
-    const abonus = skill.ability = this.system.abilities[config.ability].total;
-    const auto = skill.auto ||= 0;
-    skill.total = rank + misc + abonus + auto;
 
     skill.spent = rank / SYSTEM.SKILLS_PER_PP;
   }
@@ -216,11 +203,19 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    * @override
    */
   prepareDerivedData() {
-    this._preparePowerPoints();
+    this.#preparePowerPoints();
+
+    //this.#prepareAbilities();
+
+    //this.#prepareDefenses();
+
+    //this.#prepareSkills();
+
+    //this.#prepareMovement();
   }
 
 
-  _preparePowerPoints() {
+  #preparePowerPoints() {
     const adv = this.advancements;
 
     const pl = adv.level ||= 0;
@@ -250,5 +245,59 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     const advantages = adv.advantages ||= 0;
 
     adv.spent = abilities + defenses + skills + powers + advantages;
+  }
+
+  #prepareAbilities() {
+    const { enhanced } = this.parent;
+
+    for (const ability of Object.entries(this.abilities)) {
+      const auto = ability.auto = enhanced[ability.id] ?? 0;
+      ability.total = ability.rank + ability.misc + auto;
+    }
+  }
+
+  #prepareDefenses() {
+    const { enhanced } = this.parent;
+
+    for (const defense of Object.entries(this.defenses)) {
+      // TODO: check if id exists here or how to get it
+      const config = SYSTEM.DEFENSES[defense.id];
+
+      let auto = defense.auto = enhanced[defense.id] ?? 0;
+      // TODO: I only need to get  system.abilities[config.ability].total
+      let abonus = defense.ability = this.abilities[config.ability].total;
+      let total = defense.total = defense.rank + defense.misc + abonus + auto;
+      defense.armor = SYSTEM.PASSIVE_BASE + total;
+    }
+  }
+
+  #prepareSkills() {
+    const { enhanced } = this.parent;
+    const skills = this.skills;
+
+    for (const skill of Object.entries(skills)) {
+      const config = SYSTEM.SKILLS[skill.id];
+
+      // TODO: I only need to get  system.abilities[config.ability].total
+      const abonus = skill.ability = this.system.abilities[config.ability].total;
+      const auto = skill.auto = enhanced[skill.id] ?? 0;
+      skill.total = skill.rank + skill.misc + abonus + auto;
+    }
+  }
+
+  #prepareMovement() {
+    const { movementPowers } = this.parent;
+    const movements = this.movement;
+    const speedValues = game.settings.get(SYSTEM.id, "movementScalesSetting");
+
+    for (const movement of Object.entries(movements)) {
+      let active = movement.active = movementPowers[movement.id];
+
+      if (movement.active) {
+        let speedRank = movement.rank + speedValues[movement.id];
+        movement.speed = SYSTEM.SCALE.DISTANCE[speedRank].m_value;
+        movement.display = `${SYSTEM.SCALE.DISTANCE[speedRank].m_label} ${SYSTEM.SCALE.DISTANCE[speedRank].m_scale}`;
+      }
+    }
   }
 }

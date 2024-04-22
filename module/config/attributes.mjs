@@ -15,42 +15,42 @@ export const ABILITIES = Object.freeze({
   strength: {
     id: "strength",
     label: "ABILITIES.Strength",
-    abbreviation: "ABLITIES.StrengthAbbr"
+    abbreviation: "ABILITIES.StrengthAbbr"
   },
   stamina: {
     id: "stamina",
     label: "ABILITIES.Stamina",
-    abbreviation: "ABLITIES.StaminaAbbr"
+    abbreviation: "ABILITIES.StaminaAbbr"
   },
   agility: {
     id: "agility",
     label: "ABILITIES.Agility",
-    abbreviation: "ABLITIES.AgilityAbbr"
+    abbreviation: "ABILITIES.AgilityAbbr"
   },
   dexterity: {
     id: "dexterity",
     label: "ABILITIES.Dexterity",
-    abbreviation: "ABLITIES.DexterityAbbr"
+    abbreviation: "ABILITIES.DexterityAbbr"
   },
   fighting: {
     id: "fighting",
     label: "ABILITIES.Fighting",
-    abbreviation: "ABLITIES.FightingAbbr"
+    abbreviation: "ABILITIES.FightingAbbr"
   },
   intelligence: {
     id: "intelligence",
     label: "ABILITIES.Intelligence",
-    abbreviation: "ABLITIES.IntelligenceAbbr"
+    abbreviation: "ABILITIES.IntelligenceAbbr"
   },
   awareness: {
     id: "awareness",
     label: "ABILITIES.Awareness",
-    abbreviation: "ABLITIES.AwarenessAbbr"
+    abbreviation: "ABILITIES.AwarenessAbbr"
   },
   presence: {
     id: "presence",
     label: "ABILITIES.Presence",
-    abbreviation: "ABLITIES.PresenceAbbr"
+    abbreviation: "ABILITIES.PresenceAbbr"
   }
 });
 

@@ -1,0 +1,32 @@
+<form class="{{cssClass}} flexrow" autocomplete="off">
+  <section class="sheet-body flexcol">
+    {{!-- Sheet Header --}}
+    <header class="sheet-header flexcol">
+    </header>
+
+    <section class="abilities">
+      <h2 class="section-header divider">
+        <span></span>
+        <label>Abilities</label>
+        <span></span>
+      </h2>
+
+      <ol class="ability-scores">
+        {{#each abilityScores as |ability| }}
+        <li class="ability flexrow" data-ability="{{ability.id}}">
+          <h4 class="label badge {{ability.id}}">{{ability.label}}</h4>
+          <div class="ability-rank">
+            <div class="label">
+              <span>{{ability.rankdisplay}}</span>
+              <i class="fa-solid fa-sort-up"></i>
+              <i class="fa-solid fa-sort-down"></i>
+            </div>
+            <input class="score hidden-input" type="number" name="system.abilities.{{ability.id}}.rank"
+              value="{{ability.rank}}" placeholder="0" min="-6" hidden>
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+    </section>
+  </section>
+</form>

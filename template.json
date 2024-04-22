@@ -1,5 +1,15 @@
 {
   "Actor": {
-    "types": ["hero", "villain", "minion"]
+    "types": ["hero", "villain"]
+  },
+  "Item": {
+    "types": [
+      "power",
+      "equipment",
+      "advantage"
+    ],
+    "htmlFields": [
+      "description.value"
+    ]
   }
 }

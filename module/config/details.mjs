@@ -16,7 +16,6 @@ export const SKILLS_PER_PP = 2;
  */
 export const PASSIVE_BASE = 10;
 
-
 /**
  * @type {{
   * abilities: number,

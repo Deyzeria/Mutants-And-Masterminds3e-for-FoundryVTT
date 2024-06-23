@@ -1,6 +1,7 @@
 import * as ATTRIBUTES from "./attributes.mjs";
 import * as DETAILS from "./details.mjs";
 import * as SCALE from "./scale.mjs";
+import * as SETTINGS from "./settings.mjs";
 export const SYSTEM_ID = "mnm3efvtt";
 
 export const SYSTEM = {
@@ -17,5 +18,8 @@ export const SYSTEM = {
     MASS: SCALE.MASS,
     TIME: SCALE.TIME,
     VOLUME: SCALE.VOLUME
+  },
+  SETTINGS: {
+    MOVEMENT: SETTINGS.MOVEMENT
   }
 }

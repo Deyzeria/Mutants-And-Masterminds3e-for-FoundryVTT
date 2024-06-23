@@ -54,7 +54,7 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     schema.abilities = new fields.SchemaField(Object.values(SYSTEM.ABILITIES).reduce((obj, ability) => {
       obj[ability.id] = new fields.SchemaField({
         rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: -6 }),
-        misc: new fields.NumberField({ ...requiredInteger, initial: 0, min: -6 })
+        misc: new fields.NumberField({ ...requiredInteger, initial: 0 })
       }, { label: ability.label });
       return obj;
     }, {}));
@@ -62,20 +62,29 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     // Defenses
     schema.defenses = new fields.SchemaField(Object.values(SYSTEM.DEFENSES).reduce((obj, defense) => {
       obj[defense.id] = new fields.SchemaField({
-        rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: -6 }),
-        misc: new fields.NumberField({ ...requiredInteger, initial: 0, min: -6 })
+        rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+        misc: new fields.NumberField({ ...requiredInteger, initial: 0 })
       }, { label: defense.label });
       return obj;
     }, {}));
 
     // Skills
     schema.skills = new fields.SchemaField(Object.values(SYSTEM.SKILLS).reduce((obj, skill) => {
-      obj[skill.id] = new fields.SchemaField({
-        rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: -6 }),
-        misc: new fields.NumberField({ ...requiredInteger, initial: 0, min: -6 }),
-        speciality: new fields.StringField({ required: false, initial: undefined, blank: false }),
-        mastery: new fields.BooleanField()
-      }, { label: skill.label });
+      if (skill.customize) {
+        obj[skill.id] = new fields.ArrayField(
+          new fields.SchemaField({
+            rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+            misc: new fields.NumberField({ ...requiredInteger, initial: 0 }),
+            speciality: new fields.StringField({ required: false, initial: undefined, blank: false }),
+          }), { label: skill.label, }
+        );
+      }
+      else {
+        obj[skill.id] = new fields.SchemaField({
+          rank: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+          misc: new fields.NumberField({ ...requiredInteger, initial: 0 }),
+        }, { label: skill.label });
+      }
       return obj;
     }, {}));
 
@@ -87,7 +96,9 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
       return obj;
     }, {}));
 
-    schema.status = new fields.ObjectField({nullable: true, initial: null});
+    schema.status = new fields.ObjectField({ nullable: true, initial: null });
+
+    schema.wounds = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
 
     return schema;
   }
@@ -107,6 +118,8 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     this._prepareAbilities();
     this._prepareDefenses();
     this._prepareSkills();
+
+    this.wounds ||= 0
   }
 
   /**
@@ -135,10 +148,7 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    */
   _prepareAbility(abilityId, ability) {
     const rank = ability.rank ||= 0;
-
     ability.misc ||= 0;
-
-    // TODO: Maximum -10
     ability.spent = Math.max(rank * 2, -10);
   }
 
@@ -162,7 +172,6 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
   _prepareDefense(defenseId, defense) {
     const rank = defense.rank ||= 0;
     defense.misc ||= 0;
-
     defense.spent = rank;
     defense.immune ||= false;
     defense.impervious ||= 0;
@@ -188,10 +197,25 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
    */
   _prepareSkill(skillId, skill) {
     const config = SYSTEM.SKILLS[skillId];
-    const rank = skill.rank ||= 0;
-    skill.misc ||= 0;
+    if (config.customize) {
+      skill.forEach(element => {
+        const rank = element.rank ||= 0;
+        element.misc ||= 0;
+        if (skillId == "expertise") {
+          element.ability ||= config.ability;
+        }
+        else {
+          element.affects ||= [];
+        }
+        element.spent = rank / SYSTEM.SKILLS_PER_PP;
+      });
+    }
+    else {
+      const rank = skill.rank ||= 0;
+      skill.misc ||= 0;
 
-    skill.spent = rank / SYSTEM.SKILLS_PER_PP;
+      skill.spent = rank / SYSTEM.SKILLS_PER_PP;
+    }
   }
 
   /**
@@ -219,12 +243,16 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     const { enhanced } = this.parent;
 
     for (const [id, defense] of Object.entries(this.defenses)) {
-      // TODO: check if id exists here or how to get it
       const config = SYSTEM.DEFENSES[id];
 
       let auto = defense.auto = enhanced[id] ?? 0;
       let abonus = defense.ability = this.abilities[config.ability].total;
-      let total = defense.total = defense.rank + defense.misc + abonus + auto;
+      if (id != SYSTEM.DEFENSES.toughness.id) {
+        var total = defense.total = defense.rank + defense.misc + abonus + auto;
+      }
+      else {
+        var total = defense.total = defense.misc + auto + (this.abilities[config.ability].total > -6 ? abonus : 0);
+      }
       defense.armor = SYSTEM.PASSIVE_BASE + total;
     }
   }
@@ -236,10 +264,24 @@ export default class MutantsAndMastermindsActorType extends foundry.abstract.Typ
     for (const [id, skill] of Object.entries(skills)) {
       const config = SYSTEM.SKILLS[id];
 
-      // TODO: I only need to get system.abilities[config.ability].total
-      const abonus = skill.ability = this.abilities[config.ability].total;
-      const auto = skill.auto = enhanced[id] ?? 0;
-      skill.total = skill.rank + skill.misc + abonus + auto;
+      if (config.customize) {
+        skill.forEach(element => {
+          element.untrained = config.untrained;
+          element.mastery = false;
+          let abonus = element.ability = this.abilities[element.ability ?? config.ability].total;
+          let auto = element.auto = enhanced[id] ?? 0;
+          element.total = element.rank + element.misc + abonus + auto;
+        });
+      }
+      else {
+        skill.untrained = config.untrained;
+        skill.mastery = false;
+
+        let abonus = skill.ability = this.abilities[config.ability].total;
+        let auto = skill.auto = enhanced[id] ?? 0;
+
+        skill.total = skill.rank + skill.misc + abonus + auto;
+      }
     }
   }
 

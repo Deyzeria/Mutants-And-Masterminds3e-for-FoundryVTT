@@ -4,8 +4,8 @@
   "description": "A system for playing Mutants and Masterminds 3rd Edition by Green Ronin, parsed by Deyzeria",
   "version": "0.0.1",
   "compatibility": {
-    "minimum": 11,
-    "maximum": 11
+    "minimum": 12,
+    "maximum": 12
   },
   "authors": [{
     "name": "Deyzeria",
@@ -18,6 +18,18 @@
       "path": "lang/en.json"
     }
   ],
+  "documentTypes": {
+    "Actor": {
+      "hero": {},
+      "villain": {}
+    },
+    "Item": {
+      "power": {},
+      "attack": {},
+      "equipment": {},
+      "advantage": {}
+    }
+  },
   "esmodules": ["mnm3efvtt.mjs"],
   "styles": ["mnm3efvtt.css"],
   "socket": true,

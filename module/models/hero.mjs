@@ -52,6 +52,8 @@ export default class MutantsAndMastermindsHero extends MutantsAndMastermindsActo
 
   prepareBaseData() {
     super.prepareBaseData();
+
+    this.details.hero.img ||= this.parent.img;
   }
 
   _prepareDetails() {

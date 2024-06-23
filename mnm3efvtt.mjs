@@ -1,12 +1,16 @@
 // Import Configs
 import { SYSTEM } from "./module/config/system.mjs";
 import * as effects from "./module/config/statuses.mjs";
+/**
+ * @global
+ */
 globalThis.SYSTEM = SYSTEM;
 
 // Import Modules
 import * as applications from "./module/applications/_module.mjs";
 import * as models from "./module/models/_module.mjs";
 import * as documents from "./module/documents/_module.mjs";
+import RegisterSystemSettings from "./module/settings/settings.mjs";
 
 Hooks.once("init", async function () {
   console.log(`Initializing Foundry Mutants And Masterminds 3e`);
@@ -16,6 +20,8 @@ Hooks.once("init", async function () {
   game.system.api = {
     models
   }
+
+  RegisterSystemSettings();
 
   CONFIG.Actor.documentClass = documents.MutantsAndMastermindsActor;
   CONFIG.Actor.dataModels = {
@@ -33,7 +39,7 @@ Hooks.once("init", async function () {
 
 Hooks.once("i18nInit", function () {
   const toLocalize = [
-    "ABILITIES", "DEFENSES", "SKILLS"
+    "ABILITIES", "DEFENSES", "SKILLS", "MOVEMENTS"
   ];
 
   for (let c of toLocalize) {

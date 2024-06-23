@@ -1,0 +1,366 @@
+@import "variables.less";
+
+.mnm3efvtt.sheet.actor {
+  --marginSize: 8px;
+  --marginHalfSize: calc(var(--marginSize) / 2);
+  --titleHeight: 40px;
+
+  .window-content {
+    background: rgba(61, 61, 61, 0.5);
+  }
+
+  .sheet-header {
+    border: 1px solid black;
+    flex: 0 0 100px;
+
+    .profile-img {
+      height: 100px;
+      width: 100px;
+    }
+  }
+
+  .miniheader {
+    box-sizing: content-box;
+    border-bottom: 0;
+    position: relative;
+    color: var(--colorRed);
+    font-family: var(--mnm3e-font-hero);
+    text-shadow: var(--fx-stroke2);
+    top: -16px;
+    left: -8px;
+    margin-bottom: -10px;
+    width: min-content;
+    z-index: 2;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -0.5rem;
+      right: -1rem;
+      top: 3px;
+      bottom: -3px;
+      border: 2px solid var(--colorDark);
+      transform: skew(-10deg);
+      z-index: -1;
+      background: linear-gradient(0deg, var(--colorYellow), white);
+    }
+  }
+
+  .scores {
+    margin: 0;
+    padding: 0;
+    column-gap: 10px;
+    z-index: 1;
+
+    .circleline {
+      margin: 5px 0px;
+      background: var(--colorTan);
+      border-radius: 20px;
+      height: 30px;
+      align-items: center;
+      z-index: 2;
+      filter: drop-shadow(2px 4px 6px var(--colorDark));
+
+      .label {
+        font-family: var(--mnm3e-font-hero);
+        background: rgb(2 175 68);
+        border-radius: 20px 0 0 20px;
+        margin: 1px 0 1px 5px;
+        line-height: 19px;
+        text-align: left;
+        padding-left: 10px;
+        border: 2px groove var(--color-border-light-highlight);
+
+        span:nth-of-type(1) {
+          //-webkit-text-stroke: 0.6px rgba(255, 255, 255, 0.9);
+          -webkit-text-fill-color: rgb(0, 0, 0);
+          flex: 0 0 75px;
+          font-size: 1rem;
+        }
+
+        span:nth-of-type(2) {
+          //-webkit-text-stroke: 0.6px rgba(255, 255, 255, 0.7);
+          -webkit-text-fill-color: rgb(0, 0, 0);
+          font-size: 1rem;
+        }
+      }
+
+      .total {
+        margin-left: -15px;
+        background: rgb(255, 73, 73);
+        text-align: center;
+        position: relative;
+        display: block;
+        border-radius: 100%;
+        flex: 0 0 28px;
+        transform: scale(1.2);
+        clip-path: none;
+        z-index: 5;
+        height: 28px;
+        font-size: 16px;
+
+        input {
+          padding: 0px;
+          height: 28px
+        }
+      }
+
+      label {
+        clip-path: polygon(0% 0%, 80% 0, 100% 50%, 80% 100%, 0% 100%);
+        text-align: right;
+        font-size: 15px;
+        flex: 0 0 46px;
+        height: 23px;
+        font-family: var(--mnm3e-font-numbers);
+        font-weight: 700;
+
+        .rank-label {
+          color: inherit;
+          margin: auto;
+          height: inherit;
+          padding-right: 9px;
+        }
+
+        input {
+          padding-right: 9px;
+          padding-top: 3px;
+          border: none;
+          background: none;
+          color: inherit;
+          margin: auto;
+          height: inherit;
+          font-weight: 700;
+        }
+      }
+
+      label:nth-of-type(2) {
+        margin-left: -15px;
+        background: var(--colorDark);
+        color: white;
+        z-index: 3;
+      }
+
+      label:nth-of-type(3) {
+        margin-left: -20px;
+        background: var(--colorBlue);
+        color: black;
+        z-index: 2;
+      }
+
+      label:nth-of-type(4) {
+        margin-left: -20px;
+        background: var(--colorYellow);
+        color: rgb(94, 94, 94);
+        z-index: 1;
+      }
+
+      .unavailable-defense {
+        font-family: var(--mnm3e-font-hero);
+        background: var(--colorRed);
+        border-radius: 0 20px 20px 0;
+        margin: 1px 5px 1px 0;
+        font-size: 1.3rem;
+        line-height: 26px;
+        text-align: left;
+        padding-left: 10px;
+        height: 28px;
+        flex: 0 0 118px;
+        border: 2px groove var(--color-border-light-highlight);
+        border-left: none;
+      }
+
+      .ac-display {
+        height: inherit;
+        margin-left: -8px;
+        flex: 0 0 30px;
+
+        .ac-shield {
+          height: inherit;
+          margin-top: -2px;
+          fill: var(--colorRed);
+        }
+
+        .ac-text {
+          font-size: 15px;
+          font-family: var(--mnm3e-font-numbers);
+          font-weight: 700;
+          position: relative;
+          text-align: right;
+          top: -24px;
+          left: -5px;
+        }
+      }
+    }
+
+    .squareline {
+      margin: 7px 0px;
+      background: var(--colorDark);
+      height: 20px;
+      align-items: center;
+      z-index: 2;
+      padding: 2px;
+
+      &.customskill {
+        background: linear-gradient(white, var(--colorTransparentYellow));
+        border-radius: 15px 0;
+        height: auto;
+        display: block;
+
+        .customskilllabel {
+          height: 22px;
+          background: var(--colorYellow);
+          font-family: var(--mnm3e-font-hero);
+          text-align: right;
+          padding-right: 10px;
+          border: 2px solid var(--colorDark);
+          border-radius: 15px 0;
+        }
+
+        .customskilladd {
+          height: 22px;
+          text-align: right;
+          padding-right: 10px;
+          font-family: var(--mnm3e-font-hero);
+          color: white;
+
+          .add {
+            background: var(--colorDark);
+            border-radius: 15px;
+            padding: 2px 8px;
+            top: 5px;
+            position: relative;
+          }
+        }
+      }
+
+      .roller {
+        background: white;
+        border: 0;
+        margin: 0;
+        padding: 0;
+        border-radius: 100%;
+        flex: 0 0 25px;
+        width: 25px;
+        z-index: 5;
+        height: 25px;
+        font-size: 16px;
+        text-align: center;
+        display: block;
+        font-family: var(--mnm3e-font-numbers);
+        font-weight: 700;
+
+        position: relative;
+        bottom: 5px;
+        left: -5px;
+      }
+
+      .label {
+        font-family: var(--mnm3e-font-normal);
+        font-size: 16px;
+        color: white;
+
+        position: relative;
+        bottom: 5px;
+      }
+
+      .attribute {
+        border: 1px solid white;
+        text-align: center;
+        flex: 0 0 20px;
+        width: 20px;
+        height: 20px;
+        margin: 0 2px;
+        padding: 0;
+        color: white;
+        font-weight: 500;
+        position: relative;
+        bottom: 5px;
+        font-family: var(--mnm3e-font-numbers);
+
+        input {
+          border: none;
+          position: relative;
+          right: 1px;
+          background: none;
+          color: inherit;
+          margin: auto;
+          height: inherit;
+          padding: 0;
+        }
+      }
+
+      label:nth-of-type(1) {
+        background: var(--colorRed);
+      }
+
+      label:nth-of-type(2) {
+        background: var(--colorDark);
+        margin: 0 4px;
+      }
+
+      label:nth-of-type(3) {
+        background: var(--colorBlue);
+      }
+
+      label:nth-of-type(4) {
+        background: var(--colorYellow);
+        color: #5e5e5e;
+      }
+    }
+  }
+}
+
+.defenses {
+  .hits {
+    box-sizing: content-box;
+    font-family: var(--mnm3e-font-hero);
+    font-size: 1.3rem;
+    justify-content: center;
+    margin-top: 20px;
+
+    .hitslabel {
+      flex: 0 0 50px;
+    }
+
+    .hitsinput {
+      flex: 0 0 30px;
+      background: rgb(255, 52, 52);
+      clip-path: polygon(0 9%, 100% 0, 95% 91%, 8% 97%);
+      border: 0;
+      text-align: center;
+    }
+  }
+}
+
+
+.border {
+  z-index: 0;
+  border-radius: 20px;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+
+  &.abilities {
+    background: var(--colorYellow);
+  }
+
+  &.defenses {
+    flex: 1;
+    background: var(--colorFaint);
+    border: 2px solid rgb(240, 189, 23);
+    margin-right: 0.3rem;
+  }
+
+  &.attacks {
+    flex: 2;
+    background: var(--colorFaint);
+    border: 2px solid rgb(240, 189, 23);
+    margin-left: 0.3rem;
+  }
+
+  &.skills {
+    background: var(--colorFaint);
+    border: 2px solid rgb(240, 189, 23);
+    margin-right: 0.3rem;
+  }
+}

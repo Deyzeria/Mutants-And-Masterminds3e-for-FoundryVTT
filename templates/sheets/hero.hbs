@@ -1,32 +1,146 @@
 <form class="{{cssClass}} flexrow" autocomplete="off">
   <section class="sheet-body flexcol">
     {{!-- Sheet Header --}}
-    <header class="sheet-header flexcol">
-    </header>
+    <div class="sheet-header">
+      <img class="profile-img" src="{{actor.system.details.hero.img}}" data-edit="system.details.hero.img"
+        title="{{system.details.hero.img}}" />
+    </div>
 
-    <section class="abilities">
-      <h2 class="section-header divider">
-        <span></span>
-        <label>Abilities</label>
-        <span></span>
-      </h2>
+    {{!--Ability scores--}}
+    <div class="flexshrink">
+      <section class="border abilities">
+        <ol class="scores grid grid-4col">
+          {{#each score.abilityScores as |ability| }}
+          <li class="ability circleline flexrow" data-ability="{{ability.id}}">
+            <a class="label">
+              <span>{{ability.label}}</span>
+            </a>
+            <label class="total">
+              <input type="text" name="system.abilities.{{ability.id}}.totalDisplay" value="{{ability.totalDisplay}}"
+                disabled>
+            </label>
+            <label class="ability-rank">
+              <div class="rank-label">{{ability.rankDisplay}}</div>
+              <input class="rank-input" type="number" name="system.abilities.{{ability.id}}.rank"
+                value="{{ability.rank}}" placeholder="0" min="-6" hidden>
+            </label>
+            <label>
+              <input type="number" name="system.abilities.{{ability.id}}.misc" value="{{ability.misc}}" placeholder="0">
+            </label>
+            <label>
+              <input type="number" name="system.abilities.{{ability.id}}.auto" value="{{ability.auto}}" disabled>
+            </label>
+          </li>
+          {{/each}}
+        </ol>
+      </section>
+    </div>
 
-      <ol class="ability-scores">
-        {{#each abilityScores as |ability| }}
-        <li class="ability flexrow" data-ability="{{ability.id}}">
-          <h4 class="label badge {{ability.id}}">{{ability.label}}</h4>
-          <div class="ability-rank">
-            <div class="label">
-              <span>{{ability.rankdisplay}}</span>
-              <i class="fa-solid fa-sort-up"></i>
-              <i class="fa-solid fa-sort-down"></i>
+    {{!--Defenses and Attacks--}}
+    <div class="flexrow">
+      <section class="border defenses">
+        <h2 class="miniheader">Defenses</h2>
+
+        <ol class="scores">
+          {{#each score.defenseScores as |defense| }}
+          <li class="defense circleline flexrow" data-ability="{{defense.id}}">
+            <a class="label flexrow">
+              <span>{{defense.label}}</span>
+              <span>({{defense.ablAbbreviation}})</span>
+            </a>
+            {{#if defense.immune}}
+            <span class="unavailable-defense">
+              Immune
+            </span>
+            {{else}}
+            <label class="total">
+              <input type="text" name="system.defenses.{{defense.id}}.totalDisplay" value="{{defense.totalDisplay}}"
+                disabled>
+            </label>
+            {{#if purchase}}
+            <label>
+              <input type="number" name="system.defenses.{{defense.id}}.rank" value="{{defense.rank}}" placeholder="0"
+                min="0">
+            </label>
+            {{else}}
+            <label>
+              <input type="number" name="system.defenses.{{defense.id}}.rank" value="-" disabled>
+            </label>
+            {{/if}}
+            <label>
+              <input type="number" name="system.defenses.{{defense.id}}.misc" value="{{defense.misc}}" placeholder="0"
+                min="0">
+            </label>
+            <label>
+              <input type="number" name="system.defenses.{{defense.id}}.auto" value="{{defense.auto}}" disabled>
+            </label>
+            <div class="ac-display">
+              <div class="ac-shield">
+                <svg version="1.1" x="0px" y="0px" viewBox="0 0 90 100" xml:space="preserve">
+                  <path d="M45,100C-2.6,79.3,0,12.6,0,12.6c0-2.2,1.8-4,4.4-4.6l39.1-7.9C44,0,44.5,0,45,0c0.5,0,1,0,1.4,0.1L85.5,8
+                          c2.6,0.5,4.4,2.4,4.4,4.6C90,12.6,92.6,79.3,45,100L45,100z">
+                  </path>
+                </svg>
+              </div>
+              <div class="ac-text">{{defense.armor}}</div>
             </div>
-            <input class="score hidden-input" type="number" name="system.abilities.{{ability.id}}.rank"
-              value="{{ability.rank}}" placeholder="0" min="-6" hidden>
-          </div>
-        </li>
-        {{/each}}
-      </ol>
-    </section>
+            {{/if}}
+          </li>
+          {{/each}}
+        </ol>
+
+        <div class="flexrow hits">
+          <span class="hitslabel">Hits</span>
+          <input class="hitsinput" type="number" name="system.wounds" value="{{wounds}}" placeholder="0" min="0">
+        </div>
+      </section>
+      <section class="border attacks">
+
+      </section>
+    </div>
+
+    {{!-- Skills - Movement - Conditions --}}
+    <div class="flexrow">
+      <section class="border skills">
+        <h2 class="miniheader">Skills</h2>
+        <ol class="scores">
+          {{#each score.skillsScores as |skill| }}
+          {{#if skill.customize}}
+          <li class="skill squareline customskill" data-skill="{{skill.id}}">
+            <div class="customskilllabel">{{skill.label}}</div>
+            <div class="customskilladd">
+              <a class="add" data-skill="{{skill.id}}">+Add</a>
+            </div>
+          </li>
+          {{else}}
+          <li class="skill squareline flexrow" data-skill="{{skill.id}}">
+            <a class="roller">
+              <span>{{skill.totalDisplay}}</span>
+            </a>
+            <span class="label">{{skill.label}}</span>
+            <label class="attribute">{{skill.ability}}</label>
+            <label class="attribute">
+              <input type="number" name="system.skills.{{skill.id}}.rank" value="{{skill.rank}}" placeholder="0" min="0">
+            </label>
+            <label class="attribute">
+              <input type="number" name="system.skills.{{skill.id}}.misc" value="{{skill.misc}}" placeholder="0">
+            </label>
+            <label class="attribute">
+              <input type="number" name="system.skills.{{skill.id}}.auto" value="{{skill.auto}}" placeholder="0" disabled>
+            </label>
+          </li>
+          {{/if}}
+          {{/each}}
+        </ol>
+      </section>
+      <section>
+
+      </section>
+      <section>
+
+      </section>
+    </div>
+
+
   </section>
 </form>

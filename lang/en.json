@@ -154,5 +154,13 @@
       "Weakened": "Temporarily lost power points in a trait. Debilitated supercedes Weakened.",
       "Compelled": "Limited to a single standard action each turn, chosen by another controlling character. Controlled supercedes compelled."
     }
+  },
+
+  "SETTINGS": {
+    "MOVEMENT": {
+      "Name": "Initial Movement Values",
+      "Label": "Configure movements",
+      "Hint": "Configure from what rank do different speeds start on rank 0"
+    }
   }
 }

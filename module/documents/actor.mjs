@@ -21,7 +21,6 @@ export default class MutantsAndMastermindsActor extends Actor {
 
   /** @override */
   prepareBaseData() {
-    console.debug(this);
   }
 
   /* -------------------------------------------- */

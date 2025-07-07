@@ -1,17 +1,57 @@
 {
+  "name": "mnm3efvtt",
+  "version": "1.0.10",
+  "description": "An unofficial implementation of the Mutants and Masterminds 3e system for FoundryVTT.",
+  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
-    "build:css": "lessc less/mnm3efvtt.less mnm3efvtt.css",
-    "lint": "eslint --ext .mjs ./",
-    "lint:fix": "eslint --ext .mjs ./ --fix",
-    "watch": "less-watch-compiler less/ ./ mnm3efvtt.less"
+    "build": "vite build",
+    "build:system": "vite build",
+    "dev": "vite",
+    "format": "npx @biomejs/biome format --write ./src/",
+    "lint": "npx @biomejs/biome lint ./src/",
+    "lint-fix": "npx @biomejs/biome lint --write ./src/",
+    "migrate-packs": "npx tsx ./build/migratePacks.ts",
+    "type-check": "tsc --noEmit",
+    "link-create": "node symlink-module-build-dir.js",
+    "link-remove": "node symlink-module-build-dir.js --clean"
+  },
+  "imports": {
+    "#lib/*": "./lib/*",
+    "#managers/*": "./src/managers/*",
+    "#stores/*": "./src/stores/*",
+    "#types/*": "./types/*",
+    "#utils/*": "./src/utils/*",
+    "#view/*": "./src/view/*"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@league-of-foundry-developers/foundry-vtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types#0a62d5d4dc84d70a77c7a9c8360e1e2ead5de242",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/node": "^22.14.0",
+    "classic-level": "^1.4.1",
+    "fs-extra": "^11.3.0",
+    "glob": "^11.0.1",
+    "jszip": "^3.10.1",
+    "postcss-scss": "^4.0.9",
+    "sass": "^1.86.3",
+    "stylelint": "^16.18.0",
+    "stylelint-config-sass-guidelines": "^12.1.0",
+    "svelte-range-slider-pips": "^2.3.1",
+    "svelte-select": "^5.8.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.2.5",
+    "yargs": "^17.7.2"
   },
   "dependencies": {
-    "@babel/eslint-parser": "^7.22.15",
-    "@foundryvtt/foundryvtt-cli": "^1.0.2",
-    "@rollup/plugin-node-resolve": "^15.2.1",
-    "eslint-plugin-jsdoc": "^46.5.0",
-    "less": "^4.2.0",
-    "less-watch-compiler": "^1.16.3",
-    "rpg-awesome": "^0.2.0"
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "svelte": "^5.25.7",
+    "svelte-preprocess": "^6.0.3",
+    "tsx": "^4.19.2"
   }
 }

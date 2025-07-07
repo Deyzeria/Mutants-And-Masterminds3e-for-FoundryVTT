@@ -1,0 +1,25 @@
+import * as ATTRIBUTES from "./attributes.ts";
+import * as DETAILS from "./details.ts";
+import * as SCALE from "./scale.ts";
+import * as SETTINGS from "./settings.ts";
+export const SYSTEM_ID = "mnm3efvtt";
+
+export const SYSTEM = {
+  id: SYSTEM_ID,
+  ABILITIES: ATTRIBUTES.ABILITIES,
+  DEFENSES: ATTRIBUTES.DEFENSES,
+  SKILLS: ATTRIBUTES.SKILLS,
+  MOVEMENTS: ATTRIBUTES.MOVEMENTS,
+  POINTS_PER_PL: DETAILS.POINTS_PER_PL,
+  SKILLS_PER_PP: DETAILS.SKILLS_PER_PP,
+  PASSIVE_BASE: DETAILS.PASSIVE_BASE,
+  SCALE: {
+    DISTANCE: SCALE.DISTANCE,
+    MASS: SCALE.MASS,
+    TIME: SCALE.TIME,
+    VOLUME: SCALE.VOLUME
+  },
+  SETTINGS: {
+    MOVEMENT: SETTINGS.MOVEMENT
+  }
+}

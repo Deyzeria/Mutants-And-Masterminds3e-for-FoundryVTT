@@ -1,0 +1,57 @@
+{
+  "id": "mnm3efvtt",
+  "title": "Mutants and Masterminds 3e by Deyzeria",
+  "description": "A system for playing Mutants and Masterminds 3rd Edition by Green Ronin, parsed by Deyzeria",
+  "version": "0.0.1",
+  "compatibility": {
+    "minimum": 13,
+    "maximum": 13
+  },
+  "authors": [
+    {
+      "name": "Deyzeria",
+      "discord": "deyzeria"
+    }
+  ],
+  "esmodules": [
+    "mnm3efvtt.js"
+  ],
+  "styles": [
+    "style.css"
+  ],
+  "flags": {
+    "hotReload": {
+      "extensions": [
+        "json"
+      ],
+      "paths": [
+        "lang"
+      ]
+    }
+  },
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": true,
+  "documentTypes": {
+    "Actor": {
+      "hero": {},
+      "minion": {}
+    },
+    "ChatMessage": {
+      "item": {},
+      "roll": {},
+      "info": {},
+      "rollTableOutput": {}
+    },
+    "Item": {
+      "power": {},
+      "advantage": {},
+      "skill": {}
+    }
+  }
+}
